@@ -25,12 +25,26 @@ void data_task(void *p) {
 
 void process_task(void *p) {
     int data = 0;
+    int buffer[5] = {0}; // Buffer para armazenar os últimos 5 valores
+    int index = 0; // Índice para o buffer circular
+    int sum = 0; // Soma dos valores no buffer
+
 
     while (true) {
         if (xQueueReceive(xQueueData, &data, 100)) {
-            // implementar filtro aqui!
 
+            sum -= buffer[index];
+            sum += data;
+            buffer[index] = data;
 
+            // Calcula a média móvel e imprime o resultado
+            if (index >= 4) { // Garante que temos 5 valores para a média
+                int avg = sum / 5;
+                printf("Média móvel: %d\n", avg);
+            }
+
+            // Atualiza o índice para o próximo elemento
+            index = (index + 1) % 5;
 
 
             // deixar esse delay!
