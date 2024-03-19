@@ -21,6 +21,7 @@
     "files.associations": {
         "freertos.h": "c",
         "semphr.h": "c",
-        "adc.h": "c"
+        "adc.h": "c",
+        "gpio.h": "c"
     }
 }
