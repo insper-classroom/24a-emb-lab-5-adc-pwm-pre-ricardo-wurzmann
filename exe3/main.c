@@ -31,22 +31,21 @@ void process_task(void *p) {
 
 
     while (true) {
-        if (xQueueReceive(xQueueData, &data, 100)) {
+        if (xQueueReceive(xQueueData, &data, portMAX_DELAY)) {
+            sum -= buffer[index]; // Subtrai o valor mais antigo da soma
+            buffer[index] = data; // Atualiza o buffer com o novo valor
+            sum += data; // Adiciona o novo valor à soma
 
-            buffer[index] = data;
-            sum += data;
-
-            if (index >= 4) {
-                int avg = sum / 5;
-                printf("Média móvel: %d\n", avg);
+            if (++index >= 5) {
+                index = 0; // Volta ao início do buffer se alcançar o final
             }
-            
-            index += 1;
 
-
-            // deixar esse delay!
-            vTaskDelay(pdMS_TO_TICKS(50));
+            int avg = sum / 5; // Calcula a média
+            printf("Média móvel: %d\n", avg);
         }
+
+        // Deixar esse delay conforme a especificação
+        vTaskDelay(pdMS_TO_TICKS(50));
     }
 }
 
